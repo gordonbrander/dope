@@ -4,6 +4,18 @@ export const isString = (value: any): value is string =>
 export const isNumber = (value: any): value is number =>
   typeof value === 'number'
 
+export const isBetween = (
+  min: number,
+  max: number
+) => (value: number): value is number =>
+  isNumber(value) && value >= min && value <= max
+
+export const isGte = (
+  min: number
+) => (value: number): value is number => value >= 0
+
+export const isPositive = isGte(0)
+
 export const isBigInt = (value: any): value is bigint =>
   typeof value === 'bigint'
 
