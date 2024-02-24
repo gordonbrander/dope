@@ -1,5 +1,7 @@
 # Dope
 
+![Node.js CI status](https://github.com/gordonbrander/dope/actions/workflows/node.js.yml/badge.svg?branch=main)
+
 Utilities for data-oriented programming (DOP). What is data-oriented programming? It's kind of like minimum viable functional programming.
 
 - Separate data and functions.
