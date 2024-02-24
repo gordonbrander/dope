@@ -7,7 +7,7 @@ export type Nullish = null | undefined
 export const mapValue = <T, U>(
   value: T | Nullish,
   func: (value: T) => U
-): U => {
+): U | undefined => {
   if (value != null) {
     return func(value)
   }
