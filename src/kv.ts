@@ -7,13 +7,13 @@ export const get = (
   path: string[]
 ) => {
   if (object == null) {
-    return null
+    return
   }
   let result = object
   for (const key of path) {
     result = result[key]
     if (result == null) {
-      return null
+      return
     }
   }
   return result
@@ -23,20 +23,20 @@ const hasOwn = Object.hasOwn
 
 /**
  * Set a deep property of an object
- * Returns a new object, or null if that path does not exist.
+ * Returns a new object, or undefined if that path does not exist.
  */
 export const put = <T extends object, V>(
   object: T,
   [key, ...path]: string[],
   value: V
-): T | null => {
+): T | undefined => {
   if (object == null || !hasOwn(object, key)) {
-    return null
+    return
   }
   if (path.length > 0) {
     const child = put(object[key], path, value)
     if (child == null) {
-      return null
+      return
     }
     return {...object, [key]: child}
   }

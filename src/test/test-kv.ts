@@ -9,18 +9,18 @@ describe('get', () => {
     assertEqual(y, 1)
   })
 
-  it('should return null if value is not present', () => {
+  it('should return undefined if value is not present', () => {
     const x = {a: 1}
     const y = get(x, ['a', 'b', 'c'])
-    assertEqual(y, null)
+    assertEqual(y, undefined)
   })
 
-  it('should return null if object is nullish', () => {
+  it('should return undefined if object is nullish', () => {
     const x = get(undefined, ['a', 'b', 'c'])
-    assertEqual(x, null)
+    assertEqual(x, undefined)
 
     const y = get(null, ['a', 'b', 'c'])
-    assertEqual(y, null)
+    assertEqual(y, undefined)
   })
 })
 
@@ -33,21 +33,21 @@ describe('put', () => {
     assert(x !== y)
   })
 
-  it('should return null if property does not exist', () => {
+  it('should return undefined if property does not exist', () => {
     const x = {a: {b: {c: 1}}}
 
     const y = put(x, ['no', 'nope', 'nah'], 2)
-    assertEqual(y, null)
+    assertEqual(y, undefined)
 
     const a = put(x, ['a', 'b', 'c', 'd'], 2)
-    assertEqual(a, null)
+    assertEqual(a, undefined)
   })
 
-  it('should return null for zero keys', () => {
+  it('should return undefined for zero keys', () => {
     const x = {a: {b: {c: 1}}}
 
     const y = put(x, [], 2)
-    assertEqual(y, null)
+    assertEqual(y, undefined)
   })
 })
 
