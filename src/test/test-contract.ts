@@ -3,6 +3,8 @@ import {strictEqual as assertEqual, strict as assert} from 'assert'
 import {
   isString,
   isNumber,
+  isInRange,
+  isPositive,
   isBigInt,
   isBool,
   isFunction,
@@ -29,6 +31,25 @@ describe('isNumber', () => {
   it('should return true if value is number', () => {
     assert(isNumber(10))
     assert(!isNumber(false))
+  })
+})
+
+describe('isPositive', () => {
+  it('should return true if value is number between range', () => {
+    assert(isPositive(1))
+    assert(!isPositive(-1))
+    // @ts-ignore
+    assert(!isPositive(''))
+  })
+})
+
+describe('isInRange', () => {
+  it('should return true if value is number between range', () => {
+    const isZeroToTen = isInRange(0, 10)
+    assert(isZeroToTen(1))
+    assert(!isZeroToTen(-1))
+    // @ts-ignore
+    assert(!isZeroToTen(''))
   })
 })
 
