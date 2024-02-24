@@ -9,7 +9,7 @@ export class DispatchError extends TypeError {
   }
 }
 
-const throwDispatchError = (value: any) => {
+export const throwDispatchError = (value: any) => {
   throw new DispatchError('No multimethod for argument', value)
 }
 
@@ -39,8 +39,11 @@ export const singledispatch = (
     if (method == null) {
       methods.delete(key)
       return
+    } else if (typeof method !== 'function') {
+      methods.set(key, method)
+      return
     }
-    methods.set(key, method)
+    throw TypeError('Method must be a function or null')
   }
 
   return call
