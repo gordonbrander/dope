@@ -39,7 +39,7 @@ export const singledispatch = (
     if (method == null) {
       methods.delete(key)
       return
-    } else if (typeof method !== 'function') {
+    } else if (typeof method === 'function') {
       methods.set(key, method)
       return
     }
