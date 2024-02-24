@@ -19,7 +19,7 @@ export const isSymbol = (value: any): value is Symbol =>
 export const isArray = Array.isArray
 
 export const isObject = (value: any): value is object =>
-  typeof value === 'object' && value !== null
+  typeof value === 'object' && value !== null && !isArray(value)
 
 type None = null | undefined
 
@@ -36,17 +36,19 @@ export const maybe = <T>(
 }
 
 /** Create a predicate that checks if a value is an instance of a class */
-export const instanceOf = (constructor: Function) => {
+export const isInstance = (constructor: Function) => {
   const isInstanceOf = (value: any) => value instanceof constructor
   return isInstanceOf
 }
 
 /** Is a JavaScript Date object? */
-export const isDate = instanceOf(Date)
+export const isDate = isInstance(Date)
 
 /** Create a predicate that checks if an object conforms to a shape */
-export const shape = (defn) => {
-  const isShapeOf = value => {
+export const shape = <T>(
+  defn: Record<string, (value: any) => boolean>
+) => {
+  const isShapeOf = (value: any): value is T => {
     if (!isObject(value)) {
       return false
     }
@@ -62,7 +64,7 @@ export const shape = (defn) => {
 }
 
 /** Create a predicate that checks if every value of array is valid */
-export const arrayOf = <T>(predicate: (value: any) => value is T) => {
+export const isArrayOf = <T>(predicate: (value: any) => value is T) => {
   const isArrayOf = (values: any): values is T[] => {
     if (!isArray(values)) {
       return false
@@ -92,35 +94,15 @@ class GuardError extends TypeError {
  * Check if value is valid. Throw a TypeError if it isn't.
  * Returns the value.
  * @example
- * const x = guard(isNumber, 10)
+ * const x = guard(10, isNumber)
  */
-export const guard = (
+export const guard = <T>(
   value: any,
-  predicate: (value: any) => boolean,
+  predicate: (value: any) => value is T,
   message = `Value didn't pass guard predicate.`
-) => {
+): T => {
   if (!predicate(value)) {
     throw new GuardError(message, predicate, value)
   }
   return value
 }
-
-/**
- * A guard that only runs if `debug.debug` property is set to true.
- * Useful for runtime type checking in development.
- * @example
- * const x = debug(isNumber, 10)
- */
-export const debug = (
-  value: any,
-  predicate: (value: any) => boolean,
-  message: string | undefined = undefined
-) => {
-  if (!debug.debug) {
-    return value
-  }
-  return guard(value, predicate, message)
-}
-
-/** Turn on debugging runtime type checking? False by default. */
-debug.debug = false
