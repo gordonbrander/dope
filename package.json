@@ -1,8 +1,35 @@
 {
-  "name": "dop",
+  "name": "dope",
   "version": "0.0.1",
   "description": "Utilities for data-oriented programming.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./compose.js": {
+      "import": "./dist/compose.js",
+      "types": "./dist/compose.d.ts"
+    },
+    "./contract.js": {
+      "import": "./dist/contract.js",
+      "types": "./dist/contract.d.ts"
+    },
+    "./kv.js": {
+      "import": "./dist/kv.js",
+      "types": "./dist/kv.d.ts"
+    },
+    "./maybe.js": {
+      "import": "./dist/maybe.js",
+      "types": "./dist/maybe.d.ts"
+    },
+    "./singledispatch.js": {
+      "import": "./dist/singledispatch.js",
+      "types": "./dist/singledispatch.d.ts"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && mocha dist/test/*.js"
