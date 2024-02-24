@@ -1,0 +1,18 @@
+{
+  "name": "dop",
+  "version": "0.0.1",
+  "description": "Utilities for data-oriented programming.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && mocha dist/test/*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.20",
+    "mocha": "^10.3.0",
+    "typescript": "^5.3.3"
+  }
+}
