@@ -4,7 +4,7 @@ export type Nullish = null | undefined
  * Apply a function to a value if that value is not none
  * Returns the return value of `func` or none.
  */
-export const map = <T, U>(
+export const mapMaybe = <T, U>(
   value: T | Nullish,
   func: (value: T) => U | Nullish
 ): U | null => {
@@ -18,8 +18,8 @@ export const map = <T, U>(
  * Apply a function to a value if that value is not none
  * Returns the return value of `func` or a fallback value.
  */
-export const mapOr = <T, U>(
+export const mapMaybeOr = <T, U>(
   value: T | Nullish,
   func: (value: T) => U | Nullish,
   fallback: U
-): U => map(value, func) ?? fallback
+): U => mapMaybe(value, func) ?? fallback

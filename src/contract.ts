@@ -36,19 +36,13 @@ export const maybe = <T>(
 }
 
 /** Create a predicate that checks if a value is an instance of a class */
-export const instance = (constructor: Function) => {
+export const instanceOf = (constructor: Function) => {
   const isInstanceOf = (value: any) => value instanceof constructor
   return isInstanceOf
 }
 
 /** Is a JavaScript Date object? */
-export const isDate = instance(Date)
-
-/** Create a predicate that checks if a value is constructor for a class */
-export const constructor = (constructor: Function) => {
-  const isConstructorOf = (value: any) => value.constructor === constructor
-  return isConstructorOf
-}
+export const isDate = instanceOf(Date)
 
 /** Create a predicate that checks if an object conforms to a shape */
 export const shape = (defn) => {
@@ -68,7 +62,7 @@ export const shape = (defn) => {
 }
 
 /** Create a predicate that checks if every value of array is valid */
-export const array = <T>(predicate: (value: any) => value is T) => {
+export const arrayOf = <T>(predicate: (value: any) => value is T) => {
   const isArrayOf = (values: any): values is T[] => {
     if (!isArray(values)) {
       return false
@@ -101,8 +95,8 @@ class GuardError extends TypeError {
  * const x = guard(isNumber, 10)
  */
 export const guard = (
-  predicate: (value: any) => boolean,
   value: any,
+  predicate: (value: any) => boolean,
   message = `Value didn't pass guard predicate.`
 ) => {
   if (!predicate(value)) {
@@ -118,14 +112,14 @@ export const guard = (
  * const x = debug(isNumber, 10)
  */
 export const debug = (
-  predicate: (value: any) => boolean,
   value: any,
+  predicate: (value: any) => boolean,
   message: string | undefined = undefined
 ) => {
   if (!debug.debug) {
     return value
   }
-  return guard(predicate, value, message)
+  return guard(value, predicate, message)
 }
 
 /** Turn on debugging runtime type checking? False by default. */
