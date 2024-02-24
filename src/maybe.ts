@@ -1,25 +1,24 @@
 export type Nullish = null | undefined
 
 /**
- * Apply a function to a value if that value is not none
- * Returns the return value of `func` or none.
+ * Apply a function to a value if that value is not nullish.
+ * Returns the return value of `func` or undefined.
  */
-export const mapMaybe = <T, U>(
+export const mapValue = <T, U>(
   value: T | Nullish,
-  func: (value: T) => U | Nullish
-): U | null => {
+  func: (value: T) => U
+): U => {
   if (value != null) {
-    return func(value) ?? null
+    return func(value)
   }
-  return null
 }
 
 /**
- * Apply a function to a value if that value is not none
+ * Apply a function to a value if that value is not nullish.
  * Returns the return value of `func` or a fallback value.
  */
-export const mapMaybeOr = <T, U>(
+export const mapValueOr = <T, U>(
   value: T | Nullish,
   func: (value: T) => U | Nullish,
   fallback: U
-): U => mapMaybe(value, func) ?? fallback
+): U => mapValue(value, func) ?? fallback
