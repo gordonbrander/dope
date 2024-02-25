@@ -1,13 +1,10 @@
-const applyTo = <T, U>(value: T, fn: (value: T) => U) => fn(value)
+const applyTo = (value, fn) => fn(value)
 
 /**
  * Pipe a value through many one-argument functions.
  * Functions are run from left to right.
  */
-export const pipe = (
-  value: any,
-  ...fns: Array<(value: any) => any>
-) => fns.reduce(applyTo, value)
+export const pipe = (value, ...fns) => fns.reduce(applyTo, value)
 
 /**
  * Compose many one-argument functions into a single one-argument function.

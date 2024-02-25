@@ -74,3 +74,5 @@ export const put = (object, path, value) => {
  * Returns a new object.
  */
 export const update = (object, path, advance) => put(object, path, advance(get(object, path)));
+/** Patch an object with another object, returning a new frozen object */
+export const patch = (object, patch) => freeze({ ...object, ...patch });

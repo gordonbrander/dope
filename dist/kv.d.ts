@@ -21,5 +21,7 @@ export declare const put: <T extends object, V>(object: T, path: Key | Path, val
  * value and returns the next value.
  * Returns a new object.
  */
-export declare const update: (object: any, path: string[], advance: (value: any) => any) => any;
+export declare const update: (object: any, path: Key | Path, advance: (value: any) => any) => any;
+/** Patch an object with another object, returning a new frozen object */
+export declare const patch: (object: any, patch: any) => any;
 export {};

@@ -1,16 +1,7 @@
 export const getConstructor = (object: any) => object.constructor
 
-export class DispatchError extends TypeError {
-  value: any
-
-  constructor(message: string, value: any) {
-    super(message)
-    this.value = value
-  }
-}
-
-export const throwDispatchError = (value: any) => {
-  throw new DispatchError('No multimethod for argument', value)
+const throwDispatchError = (value: any) => {
+  throw new TypeError('No multimethod for argument')
 }
 
 /**
