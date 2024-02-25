@@ -8,6 +8,8 @@ Utilities for data-oriented programming (DOP).
 - Deep getters/setters (`kv.js`)
 - Data schema validation (`contract.js`)
 - "Optionals" using nullish values (`maybe.js`)
+- Generator versions of map, filter, etc (`generator.js`)
+- Async generator versions of map, filter, etc (`generator-async.js`)
 - Functional polymorphism (`singledispatch.js`)
 - Function composition (`compose.js`)
 
