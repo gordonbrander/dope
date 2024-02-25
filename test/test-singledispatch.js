@@ -4,25 +4,16 @@ import {
   strict as assert,
   throws as assertThrows
 } from 'assert'
-import singledispatch from '../singledispatch.js'
-import {getConstructor} from '../singledispatch.js'
+import {singledispatch, getConstructor} from '../dist/singledispatch.js'
 
 class Vec2d {
-  x: number
-  y: number
-
-  constructor(x: number, y: number) {
+  constructor(x, y) {
     this.x = x
     this.y = y
   }
 }
 
-const rect = ({x, y, width, height}: {
-  x: number,
-  y: number,
-  width: number,
-  height: number
-}) => ({
+const rect = ({x, y, width, height}) => ({
   type: 'rect',
   x,
   y,
@@ -30,11 +21,7 @@ const rect = ({x, y, width, height}: {
   height
 })
 
-const circle = ({x, y, rad}: {
-  x: number,
-  y: number,
-  rad: number
-}) => ({
+const circle = ({x, y, rad}) => ({
   type: 'circle',
   x,
   y,
@@ -44,8 +31,8 @@ const circle = ({x, y, rad}: {
 describe('singledispatch', () => {
   it('should dispatch on constructor of first argument by default', () => {
     const add = singledispatch()
-    add.define(Number, (a: number, b: number) => a + b)
-    add.define(Vec2d, (a: Vec2d, b: Vec2d) => new Vec2d(a.x + b.x, a.y + b.y))
+    add.define(Number, (a, b) => a + b)
+    add.define(Vec2d, (a, b) => new Vec2d(a.x + b.x, a.y + b.y))
 
     const a = add(1, 2)
     assertEqual(a, 3)
@@ -56,7 +43,7 @@ describe('singledispatch', () => {
   })
 
   it('should allow you to specify a dispatch function', () => {
-    const dimensions = singledispatch((x: any) => x.type)
+    const dimensions = singledispatch(x => x.type)
     dimensions.define('rect', ({width, height}) => [width, height])
     dimensions.define('circle', ({rad}) => [rad * 2, rad * 2])
 
@@ -80,7 +67,7 @@ describe('singledispatch', () => {
 
   it('should throw an error by default when no method is found', () => {
     const add = singledispatch()
-    add.define(String, (a: string, b: string) => a + b)
+    add.define(String, (a, b) => a + b)
 
     assertThrows(() => add(1, 2))
   })
@@ -88,7 +75,7 @@ describe('singledispatch', () => {
   it('should allow you to specify a fallback function for when no method is found', () => {
     const add = singledispatch(
       getConstructor,
-      (a: any, b: any) => a + b
+      (a, b) => a + b
     )
 
     assertEqual(add(1, 2), 3)

@@ -18,7 +18,7 @@ import {
   shape,
   isArrayOf,
   guard
-} from '../contract.js'
+} from '../dist/contract.js'
 
 describe('isString', () => {
   it('should return true if value is string', () => {
@@ -131,19 +131,14 @@ describe('maybe', () => {
 
 describe('isInstance', () => {
   class Vec2d {
-    x: number
-    y: number
-
-    constructor(x: number, y: number) {
+    constructor(x, y) {
       this.x = x
       this.y = y
     }
   }
 
   class Vec3d extends Vec2d {
-    z: number
-
-    constructor(x: number, y: number, z: number) {
+    constructor(x, y, z) {
       super(x, y)
       this.z = z
     }
@@ -181,13 +176,7 @@ describe('isArrayOf', () => {
 
 describe('shape', () => {
   it('should validate the shape of an object', () => {
-    type Profile = {
-      id: number
-      username: string
-      socials: Array<{url: string}>
-    }
-  
-    const isProfile = shape<Profile>({
+    const isProfile = shape({
       id: isNumber,
       username: isString,
       socials: isArrayOf(

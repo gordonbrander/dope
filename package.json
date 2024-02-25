@@ -2,6 +2,7 @@
   "name": "dope",
   "version": "0.0.1",
   "description": "Utilities for data-oriented programming.",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -32,13 +33,11 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npm run build && mocha dist/test/*.js"
+    "test": "npm run build && mocha test/*.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.20",
     "mocha": "^10.3.0",
     "typescript": "^5.3.3"
   }

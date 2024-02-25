@@ -1,6 +1,6 @@
 import {describe, it} from 'mocha'
 import {strictEqual as assertEqual} from 'assert'
-import {mapValue, mapValueOr} from '../maybe.js'
+import {mapValue, mapValueOr} from '../dist/maybe.js'
 
 describe('mapValue', () => {
   it('should apply the function if value is not nullish', () => {

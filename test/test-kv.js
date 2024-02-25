@@ -1,6 +1,6 @@
 import {describe, it} from 'mocha'
 import {strictEqual as assertEqual, strict as assert} from 'assert'
-import {get, put, update} from '../kv.js'
+import {get, put, update} from '../dist/kv.js'
 
 describe('get', () => {
   it('should get the deep value if present', () => {
