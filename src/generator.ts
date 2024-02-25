@@ -45,72 +45,13 @@ export const flatMap = <T, U>(
   transform: (value: T) => Iterable<U>
 ): Generator<U, void> => flat(map(iterable, transform))
 
-/** Take up to a certain number of items, returning a generator */
-export function* take<T>(
-  iterable: Iterable<T>,
-  count: number
-): Generator<T, void> {
-  let i = 0
-  for (const value of iterable) {
-    if (i >= count) {
-      return
-    }
-    yield value
-    i++
-  }
-}
-
-/** Take while predicate is true, returning a generator */
-export function* takeWhile<T>(
-  iterable: Iterable<T>,
-  predicate: (value: T) => boolean
-): Generator<T, void, void> {
-  let i = 0
-  for (const value of iterable) {
-    if (!predicate(value)) {
-      return
-    }
-    yield value
-    i++
-  }
-}
-
-/** Skip a certain number of items, returning a generator */
-export function* skip<T>(
-  iterable: Iterable<T>,
-  count: number
-): Generator<T, void> {
-  let i = 0
-  for (const value of iterable) {
-    if (i >= count) {
-      yield value
-    }
-    i++
-  }
-}
-
-/** Skip while predicate is true, returning a generator */
-export function* skipWhile<T>(
-  iterable: Iterable<T>,
-  predicate: (value: T) => boolean
-): Generator<T, void, void> {
-  skipLoop: for (const value of iterable) {
-    if (!predicate(value)) {
-      break skipLoop
-    }
-  }
-  for (const value of iterable) {
-    yield value
-  }
-}
-
 /**
  * Find the first value that passes predicate.
  * Returns value or undefined, if predicate fails.
  */
 export function find<T>(
-  iterable: Iterable<any>,
-  predicate: (value: any) => value is T
+  iterable: Iterable<T>,
+  predicate: (value: T) => boolean
 ): T | undefined {
   for (const value of iterable) {
     if (predicate(value)) {
@@ -144,8 +85,6 @@ export function forEach<T>(
     callback(value)
   }
 }
-
-export const each = forEach
 
 /** Reduce over an iterable */
 export function reduce<T, U>(
