@@ -31,8 +31,20 @@ export const isSymbol = (value: any): value is Symbol =>
 
 export const isArray = Array.isArray
 
-export const isObject = (value: any): value is object =>
-  typeof value === 'object' && value !== null && !isArray(value)
+/** Returns true if value is an object */
+export const isObject= (value: any): value is object =>
+  typeof value === 'object' && value !== null
+
+/**
+ * Returns true if value is a "plain" object (e.g. `{}`).
+ * Returns true for objects have been created with the Object constructor,
+ * or have a prototype of `null`.
+ */
+export const isPlainObject = (value: any): value is object => (
+  typeof value === 'object' &&
+  value != null &&
+  (value.constructor === Object || Object.getPrototypeOf(value) == null)
+)
 
 type Nullish = null | undefined
 
@@ -87,35 +99,23 @@ export const isArrayOf = <T>(predicate: (value: any) => value is T) => {
   return isArrayOf
 }
 
-/** A Specialized TypeError with additional fields */
-class GuardError extends TypeError {
-  predicate: (value: any) => boolean
-  value: any
-
-  constructor(
-    message: string,
-    predicate: (value: any) => boolean,
-    value: any
-  ) {
-    super(message)
-    this.predicate = predicate
-    this.value = value
-  }
-}
-
 /**
  * Check if value is valid. Throw a TypeError if it isn't.
  * Returns the value.
  * @example
  * const x = guard(10, isNumber)
  */
-export const guard = <T>(
+export const check = <T>(
   value: any,
   predicate: (value: any) => value is T,
-  message = `Value didn't pass guard predicate.`
+  message: string = `Value didn't pass check.`
 ): T => {
   if (!predicate(value)) {
-    throw new GuardError(message, predicate, value)
+    throw new TypeError(
+      `${message}
+Value: ${value}
+Predicate: ${predicate}`
+    )
   }
   return value
 }

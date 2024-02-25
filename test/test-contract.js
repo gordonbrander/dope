@@ -15,14 +15,23 @@ import {
   isSymbol,
   isArray,
   isObject,
+  isPlainObject,
   isNullish,
   maybe,
   isInstance,
   isDate,
   shape,
   isArrayOf,
-  guard
+  check
 } from '../dist/contract.js'
+
+// Used in some tests
+class Vec2d {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+}
 
 describe('isString', () => {
   it('should return true if value is string', () => {
@@ -95,10 +104,29 @@ describe('isArray', () => {
 })
 
 describe('isObject', () => {
-  it('should return true if value is object and not null or an array', () => {
+  it('should return true if value is object and not null', () => {
     assert(isObject({}))
-    assert(!isObject([]))
+    assert(isObject([]))
+    assert(new Vec2d(0, 0))
     assert(!isObject(null))
+  })
+})
+
+describe('isPlainObject', () => {
+  it('should return true if value is a "plain" object', () => {
+    assert(isPlainObject({}))
+  })
+
+  it('should return false for things that are not "plain" object', () => {
+    assert(!isPlainObject([]))
+    assert(!isPlainObject(new Vec2d(0, 0)))
+    assert(!isPlainObject(null))
+  })
+
+
+  it('should return true if object has a null prototype', () => {
+    const x = Object.create(null)
+    assert(isPlainObject(x))
   })
 })
 
@@ -201,12 +229,12 @@ describe('shape', () => {
   })
 })
 
-describe('guard', () => {
+describe('check', () => {
   it('should return the value', () => {
-    assertEqual(guard(10, isNumber), 10)
+    assertEqual(check(10, isNumber), 10)
   })
 
   it('should throw if value does not match predicate', () => {
-    assertThrows(() => guard(10, isString))
+    assertThrows(() => check(10, isString))
   })
 })
