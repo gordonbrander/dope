@@ -37,6 +37,26 @@ export const findAsync = async (iterable, predicate) => {
     }
 };
 /**
+ * Group items in an iterable by key.
+ * Returns a plain object where keys are the result of calling `key` on each
+ * item, and values are arrays of associated items.
+ * @example
+ * const items = [{type: 'a', value: 1}, {type: 'b', value: 2}, {type: 'a', value: 3}]
+ * const grouped = await groupByAsync(items, item => item.type)
+ * grouped // {a: [{type: 'a', value: 1}, {type: 'a', value: 3}], b: [{type: 'b', value: 2}]}
+ */
+export const groupByAsync = async (iterable, key) => {
+    const result = {};
+    for await (const value of iterable) {
+        const k = key(value);
+        if (result[k] == null) {
+            result[k] = [];
+        }
+        result[k].push(value);
+    }
+    return result;
+};
+/**
  * Scan over an iterable.
  * Returns a generator of intermediate reduction states.
  */
@@ -47,12 +67,6 @@ export async function* scanAsync(iterable, step, initial) {
         yield state;
     }
 }
-/** Iterate over each item in an iterable with a callback function */
-export async function forEachAsync(iterable, callback) {
-    for await (const value of iterable) {
-        callback(value);
-    }
-}
 /** Reduce over an iterable */
 export async function reduceAsync(iterable, step, initial) {
     let state = initial;
@@ -60,4 +74,10 @@ export async function reduceAsync(iterable, step, initial) {
         state = await step(state, value);
     }
     return state;
+}
+/** Iterate over each item in an iterable with a callback function */
+export async function forEachAsync(iterable, callback) {
+    for await (const value of iterable) {
+        callback(value);
+    }
 }

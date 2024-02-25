@@ -1,5 +1,9 @@
 import {describe, it} from 'mocha'
-import {strictEqual as assertEqual, strict as assert} from 'assert'
+import {
+  strictEqual as assertEqual,
+  strict as assert,
+  throws as assertThrows
+} from 'assert'
 import {get, put, update} from '../dist/kv.js'
 
 describe('get', () => {
@@ -25,7 +29,19 @@ describe('get', () => {
 })
 
 describe('put', () => {
-  it('should set the deep value if property exists, returning a new object', () => {
+  it('should set the property by key, returning a new object', () => {
+    const x = {a: {b: {c: 1}}}
+    const y = put(x, 'a', 2)
+    assertEqual(y.a, 2)
+  })
+
+  it('should create the key if it does not exist', () => {
+    const x = {}
+    const y = put(x, 'a', 2)
+    assertEqual(y.a, 2)
+  })
+
+  it('should set the deep property by path, returning a new object', () => {
     const x = {a: {b: {c: 1}}}
     const y = put(x, ['a', 'b', 'c'], 2)
     const z = get(y, ['a', 'b', 'c'])
@@ -33,14 +49,17 @@ describe('put', () => {
     assert(x !== y)
   })
 
-  it('should return undefined if property does not exist', () => {
+  it(`should create the portions of the path that don't exist`, () => {
     const x = {a: {b: {c: 1}}}
 
-    const y = put(x, ['no', 'nope', 'nah'], 2)
-    assertEqual(y, undefined)
+    const x2 = put(x, ['no', 'nope', 'nah'], 2)
+    assertEqual(x2.no.nope.nah, 2)
 
-    const a = put(x, ['a', 'b', 'c', 'd'], 2)
-    assertEqual(a, undefined)
+    const x3 = put(x, ['a', 'b', 'c', 'd'], 2)
+    assertEqual(x3.a.b.c.d, 2)
+
+    const x4 = put({a: {b: 1}}, ['a', 'b', 'c'], 3)
+    assertEqual(x4.a.b.c, 3)
   })
 
   it('should return the original object if no value change is made', () => {
@@ -56,11 +75,9 @@ describe('put', () => {
     assertEqual(x, y)
   })
 
-  it('should return undefined for zero keys', () => {
+  it('should throw for zero keys', () => {
     const x = {a: {b: {c: 1}}}
-
-    const y = put(x, [], 2)
-    assertEqual(y, undefined)
+    assertThrows(() => put(x, [], 2))
   })
 })
 

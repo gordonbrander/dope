@@ -29,13 +29,33 @@ export const flatMap = (iterable, transform) => flat(map(iterable, transform));
  * Find the first value that passes predicate.
  * Returns value or undefined, if predicate fails.
  */
-export function find(iterable, predicate) {
+export const find = (iterable, predicate) => {
     for (const value of iterable) {
         if (predicate(value)) {
             return value;
         }
     }
-}
+};
+/**
+ * Group items in an iterable by key.
+ * Returns a plain object where keys are the result of calling `key` on each
+ * item, and values are arrays of associated items.
+ * @example
+ * const items = [{type: 'a', value: 1}, {type: 'b', value: 2}, {type: 'a', value: 3}]
+ * const grouped = groupBy(items, item => item.type)
+ * grouped // {a: [{type: 'a', value: 1}, {type: 'a', value: 3}], b: [{type: 'b', value: 2}]}
+ */
+export const groupBy = (iterable, key) => {
+    const result = {};
+    for (const value of iterable) {
+        const k = key(value);
+        if (result[k] == null) {
+            result[k] = [];
+        }
+        result[k].push(value);
+    }
+    return result;
+};
 /**
  * Scan over an iterable.
  * Returns a generator of intermediate reduction states.
@@ -47,12 +67,6 @@ export function* scan(iterable, step, initial) {
         yield state;
     }
 }
-/** Iterate over each item in an iterable with a callback function */
-export function forEach(iterable, callback) {
-    for (const value of iterable) {
-        callback(value);
-    }
-}
 /** Reduce over an iterable */
 export function reduce(iterable, step, initial) {
     let state = initial;
@@ -60,4 +74,10 @@ export function reduce(iterable, step, initial) {
         state = step(state, value);
     }
     return state;
+}
+/** Iterate over each item in an iterable with a callback function */
+export function forEach(iterable, callback) {
+    for (const value of iterable) {
+        callback(value);
+    }
 }

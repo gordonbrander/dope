@@ -1,14 +1,24 @@
 export const isString = (value) => typeof value === 'string';
+export const isSymbol = (value) => typeof value === 'symbol';
 export const isNumber = (value) => typeof value === 'number';
 export const isInRange = (min, max) => (value) => isNumber(value) && value >= min && value <= max;
 const isGte = (min) => (value) => isNumber(value) && value >= 0;
 export const isPositive = isGte(0);
+export const isKey = (key) => isString(key) || isNumber(key) || isSymbol(key);
 export const isBigInt = (value) => typeof value === 'bigint';
 export const isBool = (value) => typeof value === 'boolean';
 export const isFunction = (value) => typeof value === 'function';
-export const isSymbol = (value) => typeof value === 'symbol';
 export const isArray = Array.isArray;
-export const isObject = (value) => typeof value === 'object' && value !== null && !isArray(value);
+/** Returns true if value is an object */
+export const isObject = (value) => typeof value === 'object' && value !== null;
+/**
+ * Returns true if value is a "plain" object (e.g. `{}`).
+ * Returns true for objects have been created with the Object constructor,
+ * or have a prototype of `null`.
+ */
+export const isPlainObject = (value) => (typeof value === 'object' &&
+    value != null &&
+    (value.constructor === Object || Object.getPrototypeOf(value) == null));
 export const isNullish = (value) => value == null;
 /** Decorate a predicate to return true for nullish values */
 export const maybe = (predicate) => {
@@ -48,25 +58,17 @@ export const isArrayOf = (predicate) => {
     };
     return isArrayOf;
 };
-/** A Specialized TypeError with additional fields */
-class GuardError extends TypeError {
-    predicate;
-    value;
-    constructor(message, predicate, value) {
-        super(message);
-        this.predicate = predicate;
-        this.value = value;
-    }
-}
 /**
  * Check if value is valid. Throw a TypeError if it isn't.
  * Returns the value.
  * @example
  * const x = guard(10, isNumber)
  */
-export const guard = (value, predicate, message = `Value didn't pass guard predicate.`) => {
+export const check = (value, predicate, message = `Value didn't pass check.`) => {
     if (!predicate(value)) {
-        throw new GuardError(message, predicate, value);
+        throw new TypeError(`${message}
+Value: ${value}
+Predicate: ${predicate}`);
     }
     return value;
 };

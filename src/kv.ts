@@ -1,11 +1,15 @@
-/**
- * Get a deep property of an object using an array path of keys
- * Returns property value, or null if property does not exist.
- */
-export const get = (
-  object: any,
-  path: string[]
-) => {
+import {check, isKey, Key, isObject} from "./contract.js"
+
+type Path = Array<Key>
+
+const getKey = (object: any, key: Key) => {
+  if (object == null) {
+    return
+  }
+  return object[key]
+}
+
+const getDeep = (object: any, path: Path) => {
   if (object == null) {
     return
   }
@@ -19,41 +23,80 @@ export const get = (
   return result
 }
 
-const hasOwn = Object.hasOwn
-const freeze = Object.freeze
+const isArray = Array.isArray
 
 /**
- * Set a deep property of an object, returning a new object.
- * The new object uses simple structural sharing. The parts of the object
- * tree that have been changed by `put` will be frozen. Other branches will
- * be left alone.
- * Returns a new object, or undefined if that path does not exist.
+ * Get a deep property of an object using an array path of keys
+ * Returns property value, or null if property does not exist.
  */
-export const put = <T extends object, V>(
+export const get = (
+  object: any,
+  path: Key | Path
+) => {
+  if (isArray(path)) {
+    return getDeep(object, path)
+  }
+  return getKey(object, path)
+}
+
+const freeze = Object.freeze
+
+const putKey = <T extends object, V>(
   object: T,
-  [key, ...path]: string[],
+  key: Key,
   value: V
-): T | undefined => {
-  if (object == null || !hasOwn(object, key)) {
-    return
-  }
-  if (path.length > 0) {
-    const child = object[key]
-    const nextChild = put(child, path, value)
-    if (nextChild == null) {
-      return
-    }
-    // If value is the same, return the original object
-    if (child === nextChild) {
-      return object
-    }
-    return freeze({...object, [key]: nextChild})
-  }
+): T => {
+  check(key, isKey, 'Key must be a string, number or symbol')
   // If value is the same, return the original object
   if (object[key] === value) {
     return object
   }
   return freeze({...object, [key]: value})
+}
+
+const isLongerThanZero = (x: any): x is number => x.length > 0
+
+const putDeep = <T extends object, V>(
+  object: T,
+  path: Path,
+  value: any
+): T => {
+  check(path, isLongerThanZero, 'Key path array cannot be empty')
+  const [key, ...restPath] = path
+  if (restPath.length > 0) {
+    let child = object[key]
+    if (!isObject(child)) {
+      child = Number.isInteger(key) ? [] : {}
+    }
+    child = putDeep(child, restPath, value)
+    return putKey<T, V>(
+      object,
+      key,
+      child
+    )
+  }
+  return putKey<T, V>(object, key, value)
+}
+
+/**
+ * Set value at `path` of an object, returning a new object.
+ * If a portion of path doesn't exist, it's created.
+ * 
+ * The new object uses simple structural sharing. The parts of the object
+ * tree that have been changed by `put` will be frozen. Other branches will
+ * be left alone.
+ * 
+ * Returns a new object, or undefined if a parent of the path does not exist.
+ */
+export const put = <T extends object, V>(
+  object: T,
+  path: Key | Path,
+  value: V
+): T | undefined => {
+  if (isArray(path)) {
+    return putDeep<T, V>(object, path, value)
+  }
+  return putKey<T, V>(object, path, value)
 }
 
 /**
