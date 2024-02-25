@@ -1,6 +1,9 @@
 export const isString = (value: any): value is string =>
   typeof value === 'string'
 
+export const isSymbol = (value: any): value is Symbol =>
+  typeof value === 'symbol'
+
 export const isNumber = (value: any): value is number =>
   typeof value === 'number'
 
@@ -17,6 +20,11 @@ const isGte = (
 
 export const isPositive = isGte(0)
 
+export type Key = string | number | symbol
+
+export const isKey = (key: Key): key is Key =>
+  isString(key) || isNumber(key) || isSymbol(key)
+
 export const isBigInt = (value: any): value is bigint =>
   typeof value === 'bigint'
 
@@ -26,13 +34,10 @@ export const isBool = (value: any): value is boolean =>
 export const isFunction = (value: any): value is Function =>
   typeof value === 'function'
 
-export const isSymbol = (value: any): value is Symbol =>
-  typeof value === 'symbol'
-
 export const isArray = Array.isArray
 
 /** Returns true if value is an object */
-export const isObject= (value: any): value is object =>
+export const isObject = (value: any): value is object =>
   typeof value === 'object' && value !== null
 
 /**
