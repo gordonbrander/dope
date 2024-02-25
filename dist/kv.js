@@ -16,8 +16,12 @@ export const get = (object, path) => {
     return result;
 };
 const hasOwn = Object.hasOwn;
+const freeze = Object.freeze;
 /**
- * Set a deep property of an object
+ * Set a deep property of an object, returning a new object.
+ * The new object uses simple structural sharing. The parts of the object
+ * tree that have been changed by `put` will be frozen. Other branches will
+ * be left alone.
  * Returns a new object, or undefined if that path does not exist.
  */
 export const put = (object, [key, ...path], value) => {
@@ -25,13 +29,22 @@ export const put = (object, [key, ...path], value) => {
         return;
     }
     if (path.length > 0) {
-        const child = put(object[key], path, value);
-        if (child == null) {
+        const child = object[key];
+        const nextChild = put(child, path, value);
+        if (nextChild == null) {
             return;
         }
-        return { ...object, [key]: child };
+        // If value is the same, return the original object
+        if (child === nextChild) {
+            return object;
+        }
+        return freeze({ ...object, [key]: nextChild });
     }
-    return { ...object, [key]: value };
+    // If value is the same, return the original object
+    if (object[key] === value) {
+        return object;
+    }
+    return freeze({ ...object, [key]: value });
 };
 /**
  * Set a deep property of an object using a function that receives the previous

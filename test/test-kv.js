@@ -43,6 +43,19 @@ describe('put', () => {
     assertEqual(a, undefined)
   })
 
+  it('should return the original object if no value change is made', () => {
+    const x = {a: {b: {c: 1}}}
+    const y = put(x, ['a', 'b', 'c'], 1)
+    assertEqual(x, y)
+  })
+
+  it('should return the original object if no value change is made (2)', () => {
+    const bc = {b: {c: 1}}
+    const x = {a: bc}
+    const y = put(x, ['a'], bc)
+    assertEqual(x, y)
+  })
+
   it('should return undefined for zero keys', () => {
     const x = {a: {b: {c: 1}}}
 

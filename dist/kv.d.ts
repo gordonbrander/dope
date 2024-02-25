@@ -4,7 +4,10 @@
  */
 export declare const get: (object: any, path: string[]) => any;
 /**
- * Set a deep property of an object
+ * Set a deep property of an object, returning a new object.
+ * The new object uses simple structural sharing. The parts of the object
+ * tree that have been changed by `put` will be frozen. Other branches will
+ * be left alone.
  * Returns a new object, or undefined if that path does not exist.
  */
 export declare const put: <T extends object, V>(object: T, [key, ...path]: string[], value: V) => T;
