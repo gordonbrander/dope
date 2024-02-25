@@ -1,5 +1,4 @@
 export * from './compose.js'
-export * from './kv.js'
 export * from './maybe.js'
 export * from './singledispatch.js'
 export * from './contract.js'

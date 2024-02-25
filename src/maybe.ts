@@ -1,4 +1,4 @@
-export type Nullish = null | undefined
+export type Nullish = (null | undefined)
 
 /**
  * Apply a function to a value if that value is not nullish.
@@ -22,3 +22,11 @@ export const mapValueOr = <T, U>(
   func: (value: T) => U | Nullish,
   fallback: U
 ): U => mapValue(value, func) ?? fallback
+
+/** Unwrap a "maybe" value, throwing an error if the value is nullish. */
+export const unwrapValue = <T>(value: T | Nullish): T => {
+  if (value == null) {
+    throw new TypeError("Value is null or undefined")
+  }
+  return value
+}

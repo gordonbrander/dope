@@ -1,5 +1,9 @@
 import {describe, it} from 'mocha'
-import {strictEqual as assertEqual, strict as assert} from 'assert'
+import {
+  strict as assert,
+  strictEqual as assertEqual,
+  throws as assertThrows
+} from 'assert'
 import {
   isString,
   isNumber,
@@ -194,5 +198,15 @@ describe('shape', () => {
 
     assert(isProfile(profile))
     assert(!isProfile({}))
+  })
+})
+
+describe('guard', () => {
+  it('should return the value', () => {
+    assertEqual(guard(10, isNumber), 10)
+  })
+
+  it('should throw if value does not match predicate', () => {
+    assertThrows(() => guard(10, isString))
   })
 })

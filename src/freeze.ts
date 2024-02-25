@@ -2,13 +2,14 @@
 export const freeze = Object.freeze
 
 /**
- * Create a factory for frozen objects.
+ * Decorate a factory function so that it freezes the return value on the
+ * way out. Factory function should take a single argument, props.
  * @example
- * const vec2d = immutable(({x, y}) => ({x, y}))
+ * const vec2d = frozen(({x, y}) => ({x, y}))
  * const vec = vec2d({x: 1, y: 2})
  * Object.isFrozen(vec) // true
  */
-export const immutable = <T, U>(
+export const frozen = <T, U>(
   factory: (props: T) => U
 ) => (props: T) => freeze(factory(props))
 
