@@ -106,6 +106,9 @@ export const put = <T extends object, V>(
  */
 export const update = (
   object: any,
-  path: string[],
+  path: Key | Path,
   advance: (value: any) => any
 ) => put(object, path, advance(get(object, path)))
+
+/** Patch an object with another object, returning a new frozen object */
+export const patch = (object: any, patch: any) => freeze({...object, ...patch})
