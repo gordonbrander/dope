@@ -34,7 +34,7 @@ export const isArray = Array.isArray
 export const isObject = (value: any): value is object =>
   typeof value === 'object' && value !== null && !isArray(value)
 
-export type Nullish = null | undefined
+type Nullish = null | undefined
 
 export const isNullish = (value: any): value is Nullish =>
   value == null

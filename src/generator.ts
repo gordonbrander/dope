@@ -1,4 +1,4 @@
-import {isNullish, Nullish} from "./contract.js"
+import {isNullish} from "./contract.js"
 
 /** Map an iterable, returning a generator */
 export function* map<T, U>(
@@ -25,7 +25,7 @@ export function* filter<T>(
 /** Map values, filtering out any nullish mapped values */
 export const filterMap = <T, U>(
   iterable: Iterable<T>,
-  transform: (value: T) => U | Nullish
+  transform: (value: T) => U | null | undefined
 ): Generator<U, void, void> => filter(map(iterable, transform), isNullish)
 
 /** Flatten an iterable of iterables, returning a generator */
