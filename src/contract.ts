@@ -34,16 +34,16 @@ export const isArray = Array.isArray
 export const isObject = (value: any): value is object =>
   typeof value === 'object' && value !== null && !isArray(value)
 
-type None = null | undefined
+export type Nullish = null | undefined
 
-export const isNullish = (value: any): value is None =>
+export const isNullish = (value: any): value is Nullish =>
   value == null
 
 /** Decorate a predicate to return true for nullish values */
 export const maybe = <T>(
   predicate: (value: any) => value is T
 ) => {
-  const isMaybe = (value: any): value is T | None =>
+  const isMaybe = (value: any): value is T | Nullish =>
     isNullish(value) || predicate(value)
   return isMaybe
 }
