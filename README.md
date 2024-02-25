@@ -17,14 +17,14 @@ Utilities for data-oriented programming (DOP).
 
 DOP? It's kind of like minimum viable functional programming:
 
-- Separate code from data.
-- Use ordinary functions. Prefer pure functions. Avoid methods.
-- Use generic data structures (arrays, plain objects). Avoid classes.
-- Prefer immutability. Avoid state mutation.
+1. Separate code from data. Prefer pure functions. Avoid methods.
+2. Use generic data structures (arrays, plain objects). Avoid classes.
+3. Prefer immutable data. Avoid state mutation.
+4. Separate data schema from data representation.
 
 It's simpler than you think. These guidelines work in any kind of language, OOP or functional languages, and they result in code that is easy to understand, easy to parallelize, easy to serialize.
 
 DOP resources:
 
-- [Talk: Data-Oriented Programming at GOTO 2023](https://www.youtube.com/watch?v=zSHvEAKLFJw) (Yehonathan Sharvit, GOTO 2023)
+- [Talk: Data-Oriented Programming](https://www.youtube.com/watch?v=kjOuD9PDyho) (Yehonathan Sharvit, GOTO 2023)
 - [Data-oriented Programming](https://www.manning.com/books/data-oriented-programming) (Yehonathan Sharvit, Manning, 2022)
