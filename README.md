@@ -4,11 +4,12 @@
 
 Utilities for data-oriented programming (DOP).
 
-- Function composition (`compose.js`)
 - Immutable data helpers (`freeze.js`)
+- Deep getters/setters (`kv.js`)
 - Data schema validation (`contract.js`)
 - "Optionals" using nullish values (`maybe.js`)
 - Functional polymorphism (`singledispatch.js`)
+- Function composition (`compose.js`)
 
 ## What is Data-Oriented Programming?
 
