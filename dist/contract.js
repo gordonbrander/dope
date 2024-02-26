@@ -62,7 +62,7 @@ export const isArrayOf = (predicate) => {
  * Check if value is valid. Throw a TypeError if it isn't.
  * Returns the value.
  * @example
- * const x = guard(10, isNumber)
+ * const x = check(10, isNumber)
  */
 export const check = (value, predicate, message = `Value didn't pass check.`) => {
     if (!predicate(value)) {

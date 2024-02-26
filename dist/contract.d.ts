@@ -1,5 +1,5 @@
 export declare const isString: (value: any) => value is string;
-export declare const isSymbol: (value: any) => value is Symbol;
+export declare const isSymbol: (value: any) => value is symbol;
 export declare const isNumber: (value: any) => value is number;
 export declare const isInRange: (min: number, max: number) => (value: number) => value is number;
 export declare const isPositive: (value: number) => value is number;
@@ -32,6 +32,6 @@ export declare const isArrayOf: <T>(predicate: (value: any) => value is T) => (v
  * Check if value is valid. Throw a TypeError if it isn't.
  * Returns the value.
  * @example
- * const x = guard(10, isNumber)
+ * const x = check(10, isNumber)
  */
 export declare const check: <T>(value: any, predicate: (value: any) => value is T, message?: string) => T;

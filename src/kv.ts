@@ -1,4 +1,4 @@
-import {check, isKey, Key, isObject} from "./contract.js"
+import {check, isKey, Key, isArray, isObject} from "./contract.js"
 
 type Path = Array<Key>
 
@@ -23,8 +23,6 @@ const getDeep = (object: any, path: Path) => {
   return result
 }
 
-const isArray = Array.isArray
-
 /**
  * Get a deep property of an object using an array path of keys
  * Returns property value, or null if property does not exist.
@@ -41,62 +39,81 @@ export const get = (
 
 const freeze = Object.freeze
 
-const putKey = <T extends object, V>(
-  object: T,
+const putArray = (
+  array: Array<any>,
   key: Key,
-  value: V
-): T => {
+  value: any
+) => {
+  const copy = [...array]
+  copy[key] = value
+  return freeze(copy)
+}
+
+const putPlainObject = (
+  object: any,
+  key: Key,
+  value: any
+) => freeze({...object, [key]: value})
+
+const putKey = (
+  object: any,
+  key: Key,
+  value: any
+) => {
   check(key, isKey, 'Key must be a string, number or symbol')
-  // If value is the same, return the original object
+  // Avoid creating object when value is equal
   if (object[key] === value) {
     return object
   }
-  return freeze({...object, [key]: value})
+  if (isArray(object)) {
+    return putArray(object, key, value)
+  } else if (isObject(object)) {
+    return putPlainObject(object, key, value)
+  }
+  throw new TypeError('Object must be an array or object')
 }
 
 const isLongerThanZero = (x: any): x is number => x.length > 0
 
-const putDeep = <T extends object, V>(
-  object: T,
+const putDeep = (
+  object: any,
   path: Path,
   value: any
-): T => {
+) => {
   check(path, isLongerThanZero, 'Key path array cannot be empty')
   const [key, ...restPath] = path
   if (restPath.length > 0) {
-    let child = object[key]
-    if (!isObject(child)) {
-      child = Number.isInteger(key) ? [] : {}
-    }
-    child = putDeep(child, restPath, value)
-    return putKey<T, V>(
+    return putKey(
       object,
       key,
-      child
+      putDeep(object[key], restPath, value)
     )
   }
-  return putKey<T, V>(object, key, value)
+  return putKey(object, key, value)
 }
 
 /**
  * Set value at `path` of an object, returning a new object.
- * If a portion of path doesn't exist, it's created.
+ * 
+ * If key does not exist on parent object, it will be created.
+ * Path must point to a property of an existing parent object.
  * 
  * The new object uses simple structural sharing. The parts of the object
  * tree that have been changed by `put` will be frozen. Other branches will
- * be left alone.
+ * be left alone. Arrays will be copied as arrays. All other objects will
+ * be copied by assigning the enumerable own properties to a new plain object.
  * 
  * Returns a new object, or undefined if a parent of the path does not exist.
  */
-export const put = <T extends object, V>(
-  object: T,
+export const put = (
+  object: any,
   path: Key | Path,
-  value: V
-): T | undefined => {
+  value: any
+) => {
   if (isArray(path)) {
-    return putDeep<T, V>(object, path, value)
+    return putDeep(object, path, value)
   }
-  return putKey<T, V>(object, path, value)
+  return putKey(object, path, value)
 }
 
 /**
