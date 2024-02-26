@@ -1,7 +1,7 @@
 export const isString = (value: any): value is string =>
   typeof value === 'string'
 
-export const isSymbol = (value: any): value is Symbol =>
+export const isSymbol = (value: any): value is symbol =>
   typeof value === 'symbol'
 
 export const isNumber = (value: any): value is number =>
@@ -108,7 +108,7 @@ export const isArrayOf = <T>(predicate: (value: any) => value is T) => {
  * Check if value is valid. Throw a TypeError if it isn't.
  * Returns the value.
  * @example
- * const x = guard(10, isNumber)
+ * const x = check(10, isNumber)
  */
 export const check = <T>(
   value: any,
